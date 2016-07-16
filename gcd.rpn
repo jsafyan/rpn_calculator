@@ -1,0 +1,28 @@
+CONST R1 45 	; a
+CONST R2 9	 	; b
+PUSH R1
+PUSH R2
+JSR GCD
+PRINTNUM
+JSR END
+
+LABEL GCD           
+POP R7				; Save return address to R7
+POP R2 				; Pop b back to R2
+BRANCHnp R2 LOOP	; If b = 0, let it fall through to a JMPR
+JMPR R7				; return a;
+
+LABEL LOOP			; Set up the recursive call
+POP R1				; Clear stack: pop a back to R1
+PUSH R2				; Push b
+PUSH R1				; PUSH a
+MOD					; Puts a mod b on the stack
+PUSH R2				; Puts b on the stack
+POP R1				; Set a to the value of b
+POP R2				; Set b to a%b (stack is now empty)
+PUSH R1				; Push "a" again
+PUSH R2				; Push "b" again
+PUSH R7				; Put the return address back on the stack (popped in gcd)
+BRANCHnzp R1 GCD 	; Recursively call gcd (b, a mod b)
+
+LABEL END
